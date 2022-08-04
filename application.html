@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Tipee</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; img-src https://*; connect-src https://*; child-src 'none';">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,300italic">
+    <link rel="stylesheet" href="styles.css">
+    <script src="axios.js"></script>
+    <script src="background.js"></script>
+  </head>
+  <body>
+  <div id="connection">
+    <label for="login">Login: </label><input type="text" id="login">
+    <label for="password">Password: </label><input type="password" id="password">
+    <button id="register">Connect</button>
+  </div>
+  <div id="badging" class="hide">
+      <div id="clock-bar">
+      </div>
+      <p id="left-hour-parent">Time to work left <span id="left-hour" class="red">• • h • •</span></p>
+      <p id="exit-hour-parent">You need to work until <span id="exit-hour">• • h • •</span></p>
+      <p id="rab-hour-parent" class="hide">You've done <span id="rab-hour" class="green"></span> more than expected</p>
+      <p style="display: flex;justify-content: space-between;align-items: center;flex-wrap: nowrap;">
+        <label for="todo-hour" style="white-space: nowrap;">Time to work</label>
+        <input id="todo-hour" min="00:00" max="12:00" type="time" style="height: 5px;width:50%;margin-left: 3px;">
+      </p>
+    <div id="exit" class="hide">
+      <button id="goout" disabled title="WORK IN PROGRESS">
+        Clock out
+      </button>
+    </div>
+    <div id="enter" class="hide">
+      <button id="goin" disabled title="WORK IN PROGRESS">
+        Clock in
+      </button>
+    </div>
+    <button id="disconnect">Disconnect</button>
+  </div>
+  </body>
+</html>

@@ -1,0 +1,118 @@
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+.red{
+  font-weight: bold;
+  color: red;
+}
+.green{
+  font-weight: bold;
+  color: #07bf7f;
+}
+
+html{
+  width: 200px;
+}
+button{
+  width: 100%;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 300;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  vertical-align: middle;
+  background-color: #bf077f;
+  color: #fff;
+  margin-top: 0.5rem!important;
+  margin-bottom: 0.5rem!important;
+  border-radius: 0.3rem;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #bf077f;
+}
+button#disconnect{
+  background-color:white;
+  color: #bf077f;
+}
+button:disabled {
+  cursor: not-allowed;
+  filter: brightness(70%);
+}
+
+input {
+  padding: 0.5rem 0.25rem;
+  margin: 0.5rem 0;
+  /*height: calc(3.5rem + 2px);*/
+  /*line-height: 1.25;*/
+  appearance: none;
+  background-clip: padding-box;
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  color: #212529;
+  display: block;
+  /*font-size: 1rem;*/
+  font-weight: 300;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  width: 92%;
+}
+label{
+  border: 1px solid transparent;
+  height: 100%;
+  padding: 0 0 0 5px;
+  pointer-events: none;
+  transition: opacity .1s ease-in-out,transform .1s ease-in-out;
+}
+p{
+  font-size: 1.1em!important;
+}
+
+.hide{
+  display: none;
+}
+
+#clock-bar{
+  background-color: lightgrey;
+  height: 10px;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.clock-bar-content{
+  height: 0;
+}
+.clock-bar-content-content{
+  width: 100%;
+  background-color: #bf077f;
+  height: 10px;
+}
+.clock-bar-content-content-end-of-day{
+  width: 100%;
+  background: linear-gradient(to right, #bf077f, lightgrey 15%);
+  height: 10px;
+}
+
+.clock-bar-content-label{
+  transform: translateX(-25%);
+  position: absolute;
+  height: 12px;
+  margin: 12px 0 0;
+  padding: 0;
+  background-color: #07bf7f;
+  color: white;
+  font-size: 0.8em;
+  white-space: nowrap;
+  opacity: 0;
+}
+
+/* En cas d'un hover de .clock-bar-content-content on augmente l'opacité de .clock-bar-content-label */
+.clock-bar-content-content:hover .clock-bar-content-label{
+  opacity: 1;
+}
