@@ -4,12 +4,12 @@
   "description": "entrez et sortez en un clic",
   "version": "0.2",
   "icons": {
-    "128": "128.png"
+    "128": "img/128.png"
   },
   "action": {
     "default_title": "Tipee",
-    "default_icon": "128.png",
-    "default_popup": "application.html"
+    "default_icon": "img/128.png",
+    "default_popup": "tpl/application.html"
   },
   "host_permissions": [
     "*://*.mathis-medard.com/*"
