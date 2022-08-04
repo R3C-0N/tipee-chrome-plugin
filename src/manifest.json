@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "tipee validateur",
+  "name": "Tipee (unofficial)",
   "description": "entrez et sortez en un clic",
-  "version": "0.2",
+  "version": "0.0.0.1",
   "icons": {
     "128": "img/128.png"
   },
@@ -15,9 +15,6 @@
     "*://*.mathis-medard.com/*"
   ],
   "permissions": [
-    "storage",
-    "unlimitedStorage",
-    "notifications",
-    "cookies"
+    "storage"
   ]
 }

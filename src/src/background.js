@@ -104,18 +104,18 @@ async function setHourEnter(hour, minute){
 function updateHour(){
     storage('totalTimeDone').then(function(totalTimeDone){
         storage('manualTimeToDo').then(function(previousManualTime){
-            console.log(previousManualTime);
-
             const todo = document.querySelector('#todo-hour').value;
             let todoHour = parseInt(todo.split(':')[0]);
             let todoMinute = parseInt(todo.split(':')[1]);
 
-            if (previousManualTime.minutes === 59 && todoMinute === 0){
-                todoHour += 1;
-                todoHour = todoHour%13;
-            } else if (previousManualTime.minutes === 0 && todoMinute === 59){
-                todoHour -= 1;
-                todoHour = todoHour === -1 ? 12 : todoHour;
+            if(previousManualTime !== undefined && previousManualTime.hours !== undefined && previousManualTime.minutes !== undefined){
+                if (previousManualTime.minutes === 59 && todoMinute === 0){
+                    todoHour += 1;
+                    todoHour = todoHour%13;
+                } else if (previousManualTime.minutes === 0 && todoMinute === 59){
+                    todoHour -= 1;
+                    todoHour = todoHour === -1 ? 12 : todoHour;
+                }
             }
             document.querySelector('#todo-hour').value = formateTime(todoHour) + ':' + formateTime(todoMinute);
 
@@ -228,7 +228,7 @@ async function loadWorkStatus(active){
             document.querySelector('#todo-hour').value = formateTime(hoursToDo) + ':' + formateTime(minutesToDo);
 
             storage('manualTimeToDo').then(function(manualTimeTodo){
-                if(manualTimeTodo.hours !== undefined && manualTimeTodo.minutes !== undefined){
+                if(manualTimeTodo !== undefined && manualTimeTodo.hours !== undefined && manualTimeTodo.minutes !== undefined){
                     if(manualTimeTodo.setDay === (new Date()).getDay()){
                         document.querySelector('#todo-hour').value = formateTime(manualTimeTodo.hours) + ':' + formateTime(manualTimeTodo.minutes);
                     } else {
