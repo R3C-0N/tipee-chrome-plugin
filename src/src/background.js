@@ -108,7 +108,7 @@ function updateHour(){
             let todoHour = parseInt(todo.split(':')[0]);
             let todoMinute = parseInt(todo.split(':')[1]);
 
-            if(previousManualTime !== undefined && previousManualTime.hours !== undefined && previousManualTime.minutes !== undefined){
+            if(previousManualTime !== undefined && previousManualTime !== null && previousManualTime.hours !== undefined && previousManualTime.minutes !== undefined){
                 if (previousManualTime.minutes === 59 && todoMinute === 0){
                     todoHour += 1;
                     todoHour = todoHour%13;
@@ -228,7 +228,7 @@ async function loadWorkStatus(active){
             document.querySelector('#todo-hour').value = formateTime(hoursToDo) + ':' + formateTime(minutesToDo);
 
             storage('manualTimeToDo').then(function(manualTimeTodo){
-                if(manualTimeTodo !== undefined && manualTimeTodo.hours !== undefined && manualTimeTodo.minutes !== undefined){
+                if(manualTimeTodo !== undefined && manualTimeTodo !== null && manualTimeTodo.hours !== undefined && manualTimeTodo.minutes !== undefined){
                     if(manualTimeTodo.setDay === (new Date()).getDay()){
                         document.querySelector('#todo-hour').value = formateTime(manualTimeTodo.hours) + ':' + formateTime(manualTimeTodo.minutes);
                     } else {
