@@ -237,82 +237,14 @@ async function loadWorkStatus(active){
                 }
             });
 
-
             const timechecks = data.data.timechecks;
-            let totalHours = 0;
-            let totalMinutes = 0;
             // pour chaque timecheck on créé une nouvelle div au sein de la div #clock-bar et on lui ajoute la classe clock-bar-content et le style margin-left par rapport à l'heure de début
             for (const timecheck of timechecks){
-                let start = timecheck.hour_in;
-                let end = timecheck.hour_out;
-                let position = 'out';
-                if(timecheck.hour_out === null){
-                    end = new Date().getHours() + ':' + new Date().getMinutes();
-                    position = 'in';
-
-                    const startHour = end.split(':')[0];
-                    const startMinute = end.split(':')[1];
-
-                    // Parse int pour avoir un nombre entier
-                    const startHourInt = parseInt(startHour);
-                    const startMinuteInt = parseInt(startMinute);
-                    const endHourInt = 23;
-                    const endMinuteInt = 59;
-
-                    const startPos = ((startHourInt * 60 + startMinuteInt) / (24 * 60)) * 100;
-                    const endPos = ((endHourInt * 60 + endMinuteInt) / (24 * 60)) * 100;
-                    const width = endPos - startPos;
-
-                    const div = document.createElement('div');
-                    div.classList.add('clock-bar-content');
-                    div.style.marginLeft = startPos + '%';
-                    div.style.width = width + '%';
-
-                    const divContent = document.createElement('div');
-                    divContent.classList.add('clock-bar-content-content-end-of-day');
-                    div.appendChild(divContent);
-
-                    document.querySelector('#clock-bar').appendChild(div);
-                }
-                store('position', {'position': position});
-                const startHour = start.split(':')[0];
-                const startMinute = start.split(':')[1];
-                const endHour = end.split(':')[0];
-                const endMinute = end.split(':')[1];
-                // Parse int pour avoir un nombre entier
-                const startHourInt = parseInt(startHour);
-                const startMinuteInt = parseInt(startMinute);
-                const endHourInt = parseInt(endHour);
-                const endMinuteInt = parseInt(endMinute);
-
-                const startPos = ((startHourInt * 60 + startMinuteInt) / (24 * 60)) * 100;
-                const endPos = ((endHourInt * 60 + endMinuteInt) / (24 * 60)) * 100;
-                const width = endPos - startPos;
-
-                totalHours += endHourInt - startHourInt;
-                totalMinutes += endMinuteInt - startMinuteInt;
-
-                const div = document.createElement('div');
-                div.classList.add('clock-bar-content');
-                div.style.marginLeft = startPos + '%';
-                div.style.width = width + '%';
-
-                // ajouter une div avec la classe clock-bar-content-content à cette div
-                const divContent = document.createElement('div');
-                divContent.classList.add('clock-bar-content-content');
-                div.appendChild(divContent);
-
-                // ajouter un label à la div créé avec les heures de début et de fin
-                const label = document.createElement('label');
-                label.textContent = start + ' - ' + (end === '23:59' ? 'xx-xx' : end);
-                label.classList.add('clock-bar-content-label');
-                divContent.appendChild(label);
-
-                document.querySelector('#clock-bar').appendChild(div);
+                const clock = new ClockBar(timecheck.hour_in, timecheck.hour_out);
             }
-            store('totalTimeDone', {'hours': totalHours, 'minutes': totalMinutes});
+            store('totalTimeDone', {'hours': ClockBar.total.hour, 'minutes': ClockBar.total.minute});
 
-            setHourEnter(totalHours, totalMinutes);
+            setHourEnter(ClockBar.total.hour, ClockBar.total.minute);
             return data.data;
         })
 }
@@ -356,7 +288,90 @@ async function goOut(){
     })
 }
 
+class ClockBar {
+    #start = {
+        string:{time:'',hour:'',minute:''},
+        numeric:{time:0,hour:0,minute:0},
+    }
+    #end = {
+        string:{time:'',hour:'',minute:''},
+        numeric:{time:0,hour:0,minute:0},
+    }
+    div = {
+        content:null,
+        position:{start:null,end:null,width:null},
+        html:null,
+    }
+    static total = {hour:0, minute:0}
+    static position = 'out';
 
+    constructor(hourIn, hourOut) {
+        this.#start.string.time = hourIn;
+        this.#end.string.time = hourOut;
+        if(this.#end.string.time === null){
+            this.#end.string.time = new Date().getHours() + ':' + new Date().getMinutes();
+            ClockBar.position = 'in';
+
+            this.#start.string.hour = formateTime(this.#end.string.time.split(':')[0]);
+            this.#start.string.minute = formateTime(this.#end.string.time.split(':')[1]);
+
+            // Parse int pour avoir un nombre entier
+            this.#start.numeric.hour = parseInt(this.#start.string.hour);
+            this.#start.numeric.minute = parseInt(this.#start.string.minute);
+            this.#end.numeric.hour = 23;
+            this.#end.numeric.minute = 59;
+
+            this.div.position.start = ((this.#start.numeric.hour * 60 + this.#start.numeric.minute) / (24 * 60)) * 100;
+            this.div.position.end = ((this.#end.numeric.hour * 60 + this.#end.numeric.minute) / (24 * 60)) * 100;
+            this.div.position.width = this.div.position.end - this.div.position.start;
+
+            this.div.html = document.createElement('div');
+            this.div.html.classList.add('clock-bar-content');
+            this.div.html.style.marginLeft = this.div.position.start + '%';
+            this.div.html.style.width = this.div.position.width + '%';
+
+            this.div.content = document.createElement('div');
+            this.div.content.classList.add('clock-bar-content-content-end-of-day');
+            this.div.html.appendChild(this.div.content);
+
+            document.querySelector('#clock-bar').appendChild(this.div.html);
+        }
+        this.#start.string.hour = formateTime(this.#start.string.time.split(':')[0]);
+        this.#start.string.minute = formateTime(this.#start.string.time.split(':')[1]);
+        this.#end.string.hour = formateTime(this.#end.string.time.split(':')[0]);
+        this.#end.string.minute = formateTime(this.#end.string.time.split(':')[1]);
+        // Parse int pour avoir un nombre entier
+        this.#start.numeric.hour = parseInt(this.#start.string.hour);
+        this.#start.numeric.minute = parseInt(this.#start.string.minute);
+        this.#end.numeric.hour = parseInt(this.#end.string.hour);
+        this.#end.numeric.minute = parseInt(this.#end.string.minute);
+
+        this.div.position.start = ((this.#start.numeric.hour * 60 + this.#start.numeric.minute) / (24 * 60)) * 100;
+        this.div.position.end = ((this.#end.numeric.hour * 60 + this.#end.numeric.minute) / (24 * 60)) * 100;
+        this.div.position.width = this.div.position.end - this.div.position.start;
+
+        ClockBar.total.hour += this.#end.numeric.hour - this.#start.numeric.hour;
+        ClockBar.total.minute += this.#end.numeric.minute - this.#start.numeric.minute;
+
+        this.div.html = document.createElement('div');
+        this.div.html.classList.add('clock-bar-content');
+        this.div.html.style.marginLeft = this.div.position.start + '%';
+        this.div.html.style.width = this.div.position.width + '%';
+
+        // ajouter une div avec la classe clock-bar-content-content à cette div
+        this.div.content = document.createElement('div');
+        this.div.content.classList.add('clock-bar-content-content');
+        this.div.html.appendChild(this.div.content);
+
+        // ajouter un label à la div créé avec les heures de début et de fin
+        const label = document.createElement('label');
+        label.textContent = this.#start.string.hour + ':' + this.#start.string.minute + ' - ' + (this.#end.string.time === new Date().getHours() + ':' + new Date().getMinutes() ? 'xx-xx' : this.#end.string.time + ':' + this.#start.string.minute);
+        label.classList.add('clock-bar-content-label');
+        this.div.content.appendChild(label);
+
+        document.querySelector('#clock-bar').appendChild(this.div.html);
+    }
+}
 
 
 
