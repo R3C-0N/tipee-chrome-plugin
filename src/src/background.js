@@ -365,7 +365,7 @@ class ClockBar {
 
         // ajouter un label à la div créé avec les heures de début et de fin
         const label = document.createElement('label');
-        label.textContent = this.#start.string.hour + ':' + this.#start.string.minute + ' - ' + (this.#end.string.time === new Date().getHours() + ':' + new Date().getMinutes() ? 'xx-xx' : this.#end.string.time + ':' + this.#start.string.minute);
+        label.textContent = this.#start.string.hour + ':' + this.#start.string.minute + ' - ' + (this.#end.string.time === new Date().getHours() + ':' + new Date().getMinutes() ? 'xx-xx' : this.#end.string.hour + ':' + this.#start.string.minute);
         label.classList.add('clock-bar-content-label');
         this.div.content.appendChild(label);
 
