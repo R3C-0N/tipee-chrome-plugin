@@ -92,6 +92,7 @@ p{
   width: 100%;
   background-color: #bf077f;
   height: 10px;
+  cursor: grabbing;
 }
 .clock-bar-content-content-end-of-day{
   width: 100%;

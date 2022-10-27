@@ -47,13 +47,11 @@ function checkToken(){
 async function setHourEnter(hour, minute){
     let time = (hour * 60) + minute
 
-    storage('position').then(function(position){
-        if(position.position === 'in'){
-            show('exit');
-        } else {
-            show('enter');
-        }
-    });
+    if(ClockBar.position === 'in'){
+        show('exit');
+    } else {
+        show('enter');
+    }
 
 
     const manualTimeToDo = await storage('manualTimeToDo');
@@ -212,7 +210,7 @@ async function getActiveUser(){
             const today = new Date();
             const year = today.getFullYear();
             // check if month is less than 10
-            const month = today.getMonth() <= 10 ? '0' + (today.getMonth() + 1) : today.getMonth() + 1;
+            const month = formateTime(today.getMonth()+1);
             const day = today.getDate();
             active.date = year + '-' + formateTime(month) + '-' + formateTime(day);
             return active;
@@ -223,7 +221,6 @@ async function loadWorkStatus(active){
         .then(function(data){
             const hoursToDo = parseInt(data.data.a_faire.split('h')[0]);
             const minutesToDo = parseInt(data.data.a_faire.split('h')[1].replace('.', ''));
-
 
             document.querySelector('#todo-hour').value = formateTime(hoursToDo) + ':' + formateTime(minutesToDo);
 
@@ -240,7 +237,7 @@ async function loadWorkStatus(active){
             const timechecks = data.data.timechecks;
             // pour chaque timecheck on créé une nouvelle div au sein de la div #clock-bar et on lui ajoute la classe clock-bar-content et le style margin-left par rapport à l'heure de début
             for (const timecheck of timechecks){
-                const clock = new ClockBar(timecheck.hour_in, timecheck.hour_out);
+                new ClockBar(timecheck.hour_in, timecheck.hour_out);
             }
             store('totalTimeDone', {'hours': ClockBar.total.hour, 'minutes': ClockBar.total.minute});
 
@@ -365,7 +362,7 @@ class ClockBar {
 
         // ajouter un label à la div créé avec les heures de début et de fin
         const label = document.createElement('label');
-        label.textContent = this.#start.string.hour + ':' + this.#start.string.minute + ' - ' + (this.#end.string.time === new Date().getHours() + ':' + new Date().getMinutes() ? 'xx-xx' : this.#end.string.hour + ':' + this.#start.string.minute);
+        label.textContent = this.#start.string.hour + ':' + this.#start.string.minute + ' - ' + (this.#end.string.time === new Date().getHours() + ':' + new Date().getMinutes() ? 'xx-xx' : this.#end.string.hour + ':' + this.#end.string.minute);
         label.classList.add('clock-bar-content-label');
         this.div.content.appendChild(label);
 
