@@ -124,10 +124,14 @@ function updateHour(){
     });
 }
 
-function formateTime(hourOrMinute){
+function formateTime(hourOrMinute, reverse = false){
     let time = hourOrMinute.toString();
     if (time.length === 1){
-        time = '0' + time;
+        if (reverse){
+            time = time + '0';
+        } else {
+            time = '0' + time;
+        }
     }
     return time;
 }
@@ -164,6 +168,7 @@ async function checkState(token){
       // await chrome.storage.local.set({'workstatus': workstatus});
       await store('workstatus', workstatus);
 
+      loadSoldes(active);
 
       return true;
 
@@ -256,32 +261,61 @@ function register(){
   store('token', {'login': login, 'password': password}).then(() => {checkToken();});
 }
 
+function loadSoldes(){
+  console.log('loadSoldes');
+  get("https://infomaniak.tipee.net/brain/plannings/soldes").then(function(data){
+      const soldes = data.data
+      if(soldes !== undefined && soldes !== null){
+          let todoHour = parseInt((soldes.hours.total+"").split('.')[0]);
+          let todoMinute = Math.floor(formateTime((soldes.hours.total+"").split('.')[1], true)*0.6);
+          if(soldes.hours.total > 0){
+              document.querySelector('#soldes-positive-content').style.width = (soldes.hours.total*10) + '%';
+              document.querySelector('#soldes-positive-text').innerHTML = formateTime(todoHour) + 'h' + formateTime(todoMinute);
+          } else {
+              document.querySelector('#soldes-negative-content').style.width = (soldes.hours.total*-10) + '%';
+              document.querySelector('#soldes-negative-text').innerHTML = formateTime(todoHour) + 'h' + formateTime(todoMinute);
+          }
+      }
+  });
+}
+
 async function goIn(){
-    console.log('goin');
-    const activeUser = await storage('activeUser').then(function(data){
-        return data;
-    });
-    // console.log(activeUser);
+    console.log('goIn');
+    const activeUser = await storage('activeUser');
+    const csrf = await storage('csrf');
+    console.log(csrf);
+
     return post('https://infomaniak.tipee.net/brain/timeclock/timechecks', {
-        person: activeUser.user,
-        timeclock: "Mac OS X"
+        'person': activeUser.user,
+        'timeclock': "Mac OS X"
+    }, {
+        headers: {
+            'Content-Type': 'application/json',
+            // cookie: locale=en; _ga=GA1.1.1983256451.1661324718; _ga_RFMER6PB4R=GS1.1.1668412976.4.0.1668412976.0.0.0; PHPSESSID=1j39sdqr11l33tnrip5ijqqtj988nfk04h24dln5b19g0vkd
+        }
     }).then(function(data){
-        console.log(data);
-        return data;
+        if(data.status === 200){
+            new ClockBar(new Date().toLocaleTimeString(), '');
+        }
     })
 }
 async function goOut(){
-    console.log('goout');
-    const activeUser = await storage('activeUser').then(function(data){
-        return data;
-    });
-    // console.log(activeUser);
+    console.log('goOut');
+    const activeUser = await storage('activeUser');
+    const csrf = await storage('csrf');
+    console.log(csrf);
+
     return post('https://infomaniak.tipee.net/brain/timeclock/timechecks', {
         person: activeUser.user,
         timeclock: "Mac OS X"
+    }, {
+        headers: {
+            'Content-Type': 'application/json',
+        }
     }).then(function(data){
-        console.log(data);
-        return data;
+        if(data.status === 200){
+            new ClockBar(new Date().toLocaleTimeString(), '');
+        }
     })
 }
 

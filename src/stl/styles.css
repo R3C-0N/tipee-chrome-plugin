@@ -117,3 +117,49 @@ p{
 .clock-bar-content-content:hover .clock-bar-content-label{
   opacity: 1;
 }
+
+#soldes{
+  width: 100%;
+  height: 4px;
+  background-color: lightgrey;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+#soldes #soldes-positive, #soldes #soldes-negative {
+  height: 100%;
+  width: 50%;
+  display: flex;
+}
+#soldes-negative {
+  flex-direction: row-reverse;
+}
+
+#soldes #soldes-positive-content{
+  background-color: #07bf7f;
+  height: 100%;
+  width: 0;
+}
+
+#soldes #soldes-negative-content{
+  background-color: #bf077f;
+  height: 100%;
+  width: 0;
+}
+
+#soldes #soldes-negative-text, #soldes #soldes-positive-text{
+  position: absolute;
+  padding: 0 5px;
+}
+#soldes #soldes-negative-text{
+  color: white;
+  background-color: #bf077f;
+  transform: translate(50%, -110%);
+}
+#soldes #soldes-positive-text{
+  color: white;
+  background-color: #07bf7f;
+  transform: translate(-50%, -110%);
+}
