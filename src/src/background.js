@@ -47,6 +47,7 @@ function checkToken(){
 async function setHourEnter(hour, minute){
     let time = (hour * 60) + minute
 
+    hide('loading')
     if(ClockBar.position === 'in'){
         show('exit');
     } else {
@@ -195,6 +196,7 @@ async function login(params){
             }
         })
         .then(function(data){
+            notify('Log in successfuly');
             return data;
         })
 }
@@ -262,10 +264,10 @@ function register(){
 }
 
 function loadSoldes(){
-  console.log('loadSoldes');
   get("https://infomaniak.tipee.net/brain/plannings/soldes").then(function(data){
       const soldes = data.data
       if(soldes !== undefined && soldes !== null){
+          notify('Soldes loaded');
           let todoHour = parseInt((soldes.hours.total+"").split('.')[0]);
           let todoMinute = Math.floor(formateTime((soldes.hours.total+"").split('.')[1], true)*0.6);
           if(soldes.hours.total > 0){
@@ -291,11 +293,11 @@ async function goIn(){
     }, {
         headers: {
             'Content-Type': 'application/json',
-            // cookie: locale=en; _ga=GA1.1.1983256451.1661324718; _ga_RFMER6PB4R=GS1.1.1668412976.4.0.1668412976.0.0.0; PHPSESSID=1j39sdqr11l33tnrip5ijqqtj988nfk04h24dln5b19g0vkd
         }
     }).then(function(data){
         if(data.status === 200){
             new ClockBar(new Date().toLocaleTimeString(), '');
+            notify('Clock in successfuly');
         }
     })
 }
@@ -315,6 +317,7 @@ async function goOut(){
     }).then(function(data){
         if(data.status === 200){
             new ClockBar(new Date().toLocaleTimeString(), '');
+            notify('Clock out successfuly');
         }
     })
 }
@@ -417,4 +420,33 @@ function hide(id){
 function show(id){
   const element = document.querySelector('#'+id);
   if(element.classList.contains('hide')) element.classList.remove('hide');
+}
+
+let notification = false;
+let notifTimeout = null;
+function notify(message, type = 'success'){
+    if(notification){
+        clearTimeout(notifTimeout);
+        const element = document.querySelector('#notification');
+        element.classList.add('popout');
+        notification = false;
+        notifTimeout = setTimeout(() => {
+            element.classList.remove('popout', 'popin');
+            element.classList.remove(type);
+            notify(message, type)
+        }, 200);
+    } else {
+        notification = true;
+        console.log(type + "-notify: " + message);
+        const element = document.querySelector('#notification');
+        element.classList.add(type);
+        element.classList.add('popin');
+        element.textContent = message;
+        notifTimeout = setTimeout(function(){
+            element.classList.remove('popin');
+            element.classList.remove(type);
+            notification = false;
+            element.textContent = 'message';
+        }, 5000);
+    }
 }
