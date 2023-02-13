@@ -235,6 +235,7 @@ async function loadWorkStatus(active){
                 if(manualTimeTodo !== undefined && manualTimeTodo !== null && manualTimeTodo.hours !== undefined && manualTimeTodo.minutes !== undefined){
                     if(manualTimeTodo.setDay === (new Date()).getDay()){
                         document.querySelector('#todo-hour').value = formateTime(manualTimeTodo.hours) + ':' + formateTime(manualTimeTodo.minutes);
+                        document.querySelector('#todo-hour').createEvent('change');
                     } else {
                         forget('manualTimeToDo');
                     }
