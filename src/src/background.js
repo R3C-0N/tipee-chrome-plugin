@@ -283,44 +283,46 @@ function loadSoldes(){
 }
 
 async function goIn(){
-    console.log('goIn');
-    const activeUser = await storage('activeUser');
-    const csrf = await storage('csrf');
-    console.log(csrf);
-
-    return post('https://infomaniak.tipee.net/brain/timeclock/timechecks', {
-        'person': activeUser.user,
-        'timeclock': "Mac OS X"
-    }, {
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    }).then(function(data){
-        if(data.status === 200){
-            new ClockBar(new Date().toLocaleTimeString(), '');
-            notify('Clock in successfuly');
-        }
-    })
+    window.open("https://infomaniak.tipee.net", "_blank");
+    // console.log('goIn');
+    // const activeUser = await storage('activeUser');
+    // const csrf = await storage('csrf');
+    // console.log(csrf);
+    //
+    // return post('https://infomaniak.tipee.net/brain/timeclock/timechecks', {
+    //     'person': activeUser.user,
+    //     'timeclock': "Mac OS X"
+    // }, {
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     }
+    // }).then(function(data){
+    //     if(data.status === 200){
+    //         new ClockBar(new Date().toLocaleTimeString(), '');
+    //         notify('Clock in successfuly');
+    //     }
+    // })
 }
 async function goOut(){
-    console.log('goOut');
-    const activeUser = await storage('activeUser');
-    const csrf = await storage('csrf');
-    console.log(csrf);
-
-    return post('https://infomaniak.tipee.net/brain/timeclock/timechecks', {
-        person: activeUser.user,
-        timeclock: "Mac OS X"
-    }, {
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    }).then(function(data){
-        if(data.status === 200){
-            new ClockBar(new Date().toLocaleTimeString(), '');
-            notify('Clock out successfuly');
-        }
-    })
+    window.open("https://infomaniak.tipee.net", "_blank");
+    // console.log('goOut');
+    // const activeUser = await storage('activeUser');
+    // const csrf = await storage('csrf');
+    // console.log(csrf);
+    //
+    // return post('https://infomaniak.tipee.net/brain/timeclock/timechecks', {
+    //     person: activeUser.user,
+    //     timeclock: "Mac OS X"
+    // }, {
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     }
+    // }).then(function(data){
+    //     if(data.status === 200){
+    //         new ClockBar(new Date().toLocaleTimeString(), '');
+    //         notify('Clock out successfuly');
+    //     }
+    // })
 }
 
 class ClockBar {
