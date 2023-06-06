@@ -2,19 +2,37 @@
   "manifest_version": 3,
   "name": "Tipee (unofficial)",
   "description": "entrez et sortez en un clic",
-  "version": "0.0.0.1",
+  "version": "0.0.0.2",
   "icons": {
     "128": "img/128.png"
   },
   "action": {
-    "default_title": "Tipee",
-    "default_icon": "img/128.png",
-    "default_popup": "tpl/application.html"
+    "default_title": "Open Tipee",
+    "default_icon": "img/128.png"
   },
-  "host_permissions": [
-    "*://*.mathis-medard.com/*"
-  ],
   "permissions": [
-    "storage"
+    "activeTab",
+    "scripting"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.tipee.net/*"
+      ],
+      "js": [
+        "lib/jquery.js",
+        "src/running.js"
+      ]
+    }
+  ],
+  "background" : {
+    "service_worker" : "src/background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["tpl/application.html"],
+      "matches": ["https://*.tipee.net/*"],
+      "use_dynamic_url": true
+    }
   ]
 }
