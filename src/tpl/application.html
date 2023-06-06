@@ -2,7 +2,7 @@
     <style>
       #custom-counter {
         background-color: white;
-        box-shadow: 0 2px 4px rgba(0,0,0,.08);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, .08);
         width: 400px;
         padding: 25px;
       }
@@ -163,6 +163,17 @@
       #custom-counter #soldes #soldes-negative-text, #custom-counter #soldes #soldes-positive-text {
         position: absolute;
         padding: 0 5px;
+        opacity: 0;
+      }
+
+      /* En cas d'un hover de .clock-bar-content-content on augmente l'opacité de .clock-bar-content-label */
+      #custom-counter #soldes #soldes-negative-content:hover #soldes-negative-text {
+        opacity: 1;
+      }
+
+      /* En cas d'un hover de .clock-bar-content-content on augmente l'opacité de .clock-bar-content-label */
+      #custom-counter #soldes #soldes-positive-content:hover #soldes-positive-text {
+        opacity: 1;
       }
 
       #custom-counter #soldes #soldes-negative-text {
@@ -259,12 +270,14 @@
 
         <div id="soldes">
             <div id="soldes-negative">
-                <div id="soldes-negative-text"></div>
-                <div id="soldes-negative-content"></div>
+                <div id="soldes-negative-content">
+                    <div id="soldes-negative-text"></div>
+                </div>
             </div>
             <div id="soldes-positive">
-                <div id="soldes-positive-text"></div>
-                <div id="soldes-positive-content"></div>
+                <div id="soldes-positive-content">
+                    <div id="soldes-positive-text"></div>
+                </div>
             </div>
         </div>
 
@@ -283,6 +296,9 @@
 <!--                Loading...-->
 <!--            </button>-->
 <!--        </div>-->
+        <div>
+            <button id="pipButton">Open Picture-in-Picture window</button>
+        </div>
     </div>
     <div id="notification">
 

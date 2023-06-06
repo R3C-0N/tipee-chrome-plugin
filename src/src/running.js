@@ -1,5 +1,6 @@
 let refresh = 10000;
 let ul_selector = 'ul[class="blocks blocks-100 blocks-xlg-3 blocks-md-2 blocks-sm-1 postits-container"]';
+let page = window;
 
 function beautifyTime(minutes) {
     return (Math.abs(minutes) / 60) > 1 ? formateTime(Math.floor(Math.abs(minutes) / 60)) + 'h' + formateTime(Math.abs(minutes) % 60) : '0h' + formateTime(Math.abs(minutes));
@@ -33,29 +34,30 @@ function addTimers(ul) {
                 endMinute -= 60;
             }
 
-            const counter = $("#custom-counter");
+            const counter = page.document.querySelector("#custom-counter");
 
-            if (counter.length === 0) {
+            if (!counter) {
                 const fileURL = chrome.runtime.getURL("tpl/application.html");
                 let xmlHttp = new XMLHttpRequest();
                 xmlHttp.open("GET", fileURL, false);
                 xmlHttp.send(null);
                 let responseParsed = (xmlHttp.responseText);
-                const list = $("div.page-content ul.blocks");
-                list.append(responseParsed)
-                document.querySelector('#todo-hour').addEventListener('change', todo)
+                const list = page.document.querySelector("div.page-content ul.blocks");
+                list.innerHTML = responseParsed
+                page.document.querySelector('#todo-hour').addEventListener('change', todo)
                 loadSoldes()
+                activePip()
             }
 
-            $("#left-hour").text(beautifyTime(x))
+            page.document.querySelector("#left-hour").textContent = beautifyTime(x)
             if (x > 0) {
                 hide("rab-hour")
                 show("exit-hour")
-                $("#exit-hour").text(formateTime(endHour) + 'h' + formateTime(endMinute))
+                page.document.querySelector("#exit-hour").textContent = (formateTime(endHour) + 'h' + formateTime(endMinute))
             } else {
                 hide("exit-hour")
                 show("rab-hour")
-                $("#rab-hour").text(beautifyTime(-x))
+                page.document.querySelector("#rab-hour").textContent = (beautifyTime(-x))
             }
             clocker(result.timechecks);
         })
@@ -75,22 +77,21 @@ function loadSoldes() {
             todoMinute = Math.floor(formateTime((soldes.hours.total + "").split('.')[1], true) * 0.6);
         }
         if (soldes.hours.total > 0) {
-            document.querySelector('#soldes-positive-content').style.width = (soldes.hours.total * 10) + '%';
-            document.querySelector('#soldes-positive-text').innerHTML = formateTime(todoHour) + 'h' + formateTime(todoMinute);
+            page.document.querySelector('#soldes-positive-content').style.width = (soldes.hours.total * 10) + '%';
+            page.document.querySelector('#soldes-positive-text').innerHTML = formateTime(todoHour) + 'h' + formateTime(todoMinute);
         } else {
-            document.querySelector('#soldes-negative-content').style.width = (soldes.hours.total * -10) + '%';
-            document.querySelector('#soldes-negative-text').innerHTML = formateTime(todoHour) + 'h' + formateTime(todoMinute);
+            page.document.querySelector('#soldes-negative-content').style.width = (soldes.hours.total * -10) + '%';
+            page.document.querySelector('#soldes-negative-text').innerHTML = formateTime(todoHour) + 'h' + formateTime(todoMinute);
         }
     }
 }
 
 function todo(value) {
-    const input = document.getElementById("todo-hour");
+    const input = page.document.getElementById("todo-hour");
     if (!input) {
         return 8;
     }
-    if (value instanceof Event) {
-        value = value.target.value
+    if (value && value.target) {
         updater()
         return;
     }
@@ -104,17 +105,17 @@ function todo(value) {
 }
 
 function hide(id) {
-    const element = document.querySelector('#' + id);
+    const element = page.document.querySelector('#' + id);
     if (!element.classList.contains('hide')) element.classList.add('hide');
 }
 
 function show(id) {
-    const element = document.querySelector('#' + id);
+    const element = page.document.querySelector('#' + id);
     if (element.classList.contains('hide')) element.classList.remove('hide');
 }
 
 function clocker(timechecks) {
-    $('#clock-bar').text(null)
+    page.document.querySelector('#clock-bar').textContent = ""
     for (const timecheck of timechecks) {
         new ClockBar(timecheck.hour_in, timecheck.hour_out);
     }
@@ -158,16 +159,16 @@ class ClockBar {
             this.div.position.end = ((this.#end.numeric.hour * 60 + this.#end.numeric.minute) / (24 * 60)) * 100;
             this.div.position.width = this.div.position.end - this.div.position.start;
 
-            this.div.html = document.createElement('div');
+            this.div.html = page.document.createElement('div');
             this.div.html.classList.add('clock-bar-content');
             this.div.html.style.marginLeft = this.div.position.start + '%';
             this.div.html.style.width = this.div.position.width + '%';
 
-            this.div.content = document.createElement('div');
+            this.div.content = page.document.createElement('div');
             this.div.content.classList.add('clock-bar-content-content-end-of-day');
             this.div.html.appendChild(this.div.content);
 
-            document.querySelector('#clock-bar').appendChild(this.div.html);
+            page.document.querySelector('#clock-bar').appendChild(this.div.html);
         }
         this.#start.string.hour = formateTime(this.#start.string.time.split(':')[0]);
         this.#start.string.minute = formateTime(this.#start.string.time.split(':')[1]);
@@ -186,23 +187,23 @@ class ClockBar {
         ClockBar.total.hour += this.#end.numeric.hour - this.#start.numeric.hour;
         ClockBar.total.minute += this.#end.numeric.minute - this.#start.numeric.minute;
 
-        this.div.html = document.createElement('div');
+        this.div.html = page.document.createElement('div');
         this.div.html.classList.add('clock-bar-content');
         this.div.html.style.marginLeft = this.div.position.start + '%';
         this.div.html.style.width = this.div.position.width + '%';
 
         // ajouter une div avec la classe clock-bar-content-content à cette div
-        this.div.content = document.createElement('div');
+        this.div.content = page.document.createElement('div');
         this.div.content.classList.add('clock-bar-content-content');
         this.div.html.appendChild(this.div.content);
 
         // ajouter un label à la div créé avec les heures de début et de fin
-        const label = document.createElement('label');
+        const label = page.document.createElement('label');
         label.textContent = this.#start.string.hour + ':' + this.#start.string.minute + ' - ' + (this.#end.string.time === new Date().getHours() + ':' + new Date().getMinutes() ? 'xx-xx' : this.#end.string.hour + ':' + this.#end.string.minute);
         label.classList.add('clock-bar-content-label');
         this.div.content.appendChild(label);
 
-        document.querySelector('#clock-bar').appendChild(this.div.html);
+        page.document.querySelector('#clock-bar').appendChild(this.div.html);
     }
 }
 
@@ -219,17 +220,48 @@ function formateTime(hourOrMinute, reverse = false) {
 }
 
 let timer;
+
 function updater() {
-    clearTimeout(timer);
-    timer = setTimeout(function () {
+    page.clearTimeout(timer);
+    timer = page.setTimeout(function () {
         addTimers();
     }, 500)
+}
+
+function activePip() {
+    console.log("try pip")
+    if (!('documentPictureInPicture' in window)) {
+        hide("pipButton")
+    }
+    const pipButton = document.querySelector('#custom-counter #pipButton')
+    pipButton.addEventListener("click", async () => {
+        try {
+            const pipPage = document.querySelector("#custom-counter");
+            const pipWindow = await documentPictureInPicture.requestWindow({
+                copyStyleSheets: true,
+                width: pipPage.clientWidth,
+                height: pipPage.clientHeight - pipButton.clientHeight,
+            });
+            pipWindow.document.body.style.padding = 0;
+
+            console.log(pipPage.clientHeight - pipButton.clientHeight);
+            hide("pipButton")
+
+            console.log(pipWindow);
+
+            // Move the player to the Picture-in-Picture window.
+            pipWindow.document.body.append(pipPage);
+            page = pipWindow;
+        } catch (e) {
+            console.log("pip don't work")
+        }
+    });
 }
 
 $(document).ready(function () {
     $.when($(ul_selector)).then(function (obj) {
         addTimers(ul_selector);
-        setInterval(function () {
+        page.setInterval(function () {
             addTimers(ul_selector);
         }, refresh);
     });
