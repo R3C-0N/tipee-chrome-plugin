@@ -7,4 +7,4 @@ To build plugin
  mv src.crx tipee_plugin.crx 
 ```
 
-[Download](https://github.com/R3C-0N/tipee-chrome-plugin/raw/master/tipee_plugin.crx) Chrome extension for Tipee.
+[Download latest](https://github.com/R3C-0N/tipee-chrome-plugin/raw/master/tipee_plugin.crx) Chrome extension version.
