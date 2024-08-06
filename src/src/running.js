@@ -1,4 +1,4 @@
-let refresh = 10000;
+let refresh = 1000000;
 let ul_selector = 'ul[class="blocks blocks-100 blocks-xlg-3 blocks-md-2 blocks-sm-1 postits-container"]';
 let page = window;
 
@@ -51,13 +51,15 @@ function addTimers(ul) {
 
             page.document.querySelector("#left-hour").textContent = beautifyTime(x)
             if (x > 0) {
-                hide("rab-hour")
-                show("exit-hour")
+                hide("rab-hour-parent")
+                show("left-hour-parent")
+                show("exit-hour-parent")
                 page.document.querySelector("#exit-hour").textContent = (formateTime(endHour) + 'h' + formateTime(endMinute))
             } else {
-                hide("exit-hour")
-                show("rab-hour")
-                page.document.querySelector("#rab-hour").textContent = (beautifyTime(-x))
+                hide("exit-hour-parent")
+                hide("left-hour-parent")
+                show("rab-hour-parent")
+                page.document.querySelector("#rab-hour").textContent = beautifyTime(x)
             }
             clocker(result.timechecks);
         })
@@ -134,6 +136,7 @@ class ClockBar {
     }
     div = {
         content: null,
+        fadeContent: null,
         position: {start: null, end: null, width: null},
         html: null,
     }
@@ -198,8 +201,12 @@ class ClockBar {
         this.div.content.classList.add('clock-bar-content-content');
         this.div.html.appendChild(this.div.content);
 
+        this.div.fadeContent = page.document.createElement('div');
+        this.div.fadeContent.classList.add('clock-bar-content-content-fade');
+        this.div.content.appendChild(this.div.fadeContent);
+
         // ajouter un label à la div créé avec les heures de début et de fin
-        const label = page.document.createElement('label');
+        let label = page.document.createElement('label');
         label.textContent = this.#start.string.hour + ':' + this.#start.string.minute + ' - ' + (this.#end.string.time === new Date().getHours() + ':' + new Date().getMinutes() ? 'xx-xx' : this.#end.string.hour + ':' + this.#end.string.minute);
         label.classList.add('clock-bar-content-label');
         this.div.content.appendChild(label);

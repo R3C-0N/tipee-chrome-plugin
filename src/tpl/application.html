@@ -71,6 +71,7 @@
       }
 
       #custom-counter label {
+        max-width: unset;
         border: 1px solid transparent;
         height: 100%;
         padding: 0;
@@ -104,6 +105,15 @@
         cursor: grabbing;
       }
 
+      #custom-counter .clock-bar-content-content-fade {
+        position: relative;
+        width: 100%;
+        height: 10px;
+        left: 0;
+        transform: translateX(100%);
+        background: linear-gradient(to right, #bf077f, lightgrey 50%);
+      }
+
       #custom-counter .clock-bar-content-content-end-of-day {
         width: 100%;
         background: linear-gradient(to right, #bf077f, lightgrey 15%);
@@ -125,6 +135,10 @@
 
       /* En cas d'un hover de .clock-bar-content-content on augmente l'opacité de .clock-bar-content-label */
       #custom-counter .clock-bar-content-content:hover .clock-bar-content-label {
+        opacity: 1;
+      }
+      /* En cas d'un hover de .clock-bar-content-content on augmente l'opacité de .clock-bar-content-label */
+      #custom-counter .clock-bar-content-content-fade:hover .clock-bar-content-label {
         opacity: 1;
       }
 
@@ -262,7 +276,7 @@
         </div>
         <p id="left-hour-parent">Time to work left <span id="left-hour" class="red">• • h • •</span></p>
         <p id="exit-hour-parent">You need to work until <span id="exit-hour">• • h • •</span></p>
-        <p id="rab-hour-parent" class="hide">You've done <span id="rab-hour" class="green"></span> more than expected</p>
+        <p id="rab-hour-parent" class="hide">You've done <span id="rab-hour" class="green">• • h • •</span> more than expected</p>
         <p style="display: flex;justify-content: space-between;align-items: center;flex-wrap: nowrap;">
             <label for="todo-hour" style="white-space: nowrap;">Time to work</label>
             <input id="todo-hour" value="08:00" min="00:00" max="12:00" type="time" style="height: 5px;width:50%;margin-left: 3px;">
