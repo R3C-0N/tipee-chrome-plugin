@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Tipee (unofficial)",
-  "description": "entrez et sortez en un clic",
+  "name": "Tipee (Math's version)",
+  "description": "Petit widget pour Tipee",
   "version": "0.0.0.2",
   "icons": {
     "128": "img/128.png"
