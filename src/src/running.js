@@ -74,7 +74,8 @@ function loadSoldes() {
         let todoHour = parseInt((soldes.hours.total + "").split('.')[0]);
         let todoMinute = 0;
         if ((soldes.hours.total + "").split('.')[1]) {
-            todoMinute = Math.floor(formateTime((soldes.hours.total + "").split('.')[1], true) * 0.6);
+            const minutes = Number('0.' + (soldes.hours.total + "").split('.')[1]) * 60;
+            todoMinute = Math.floor(minutes);
         }
         if (soldes.hours.total > 0) {
             page.document.querySelector('#soldes-positive-content').style.width = (soldes.hours.total * 10) + '%';
@@ -208,6 +209,7 @@ class ClockBar {
 }
 
 function formateTime(hourOrMinute, reverse = false) {
+    hourOrMinute = Math.round(hourOrMinute);
     let time = hourOrMinute.toString();
     if (time.length === 1) {
         if (reverse) {
@@ -229,7 +231,6 @@ function updater() {
 }
 
 function activePip() {
-    console.log("try pip")
     if (!('documentPictureInPicture' in window)) {
         hide("pipButton")
     }
@@ -244,14 +245,17 @@ function activePip() {
             });
             pipWindow.document.body.style.padding = 0;
 
-            console.log(pipPage.clientHeight - pipButton.clientHeight);
             hide("pipButton")
 
-            console.log(pipWindow);
 
             // Move the player to the Picture-in-Picture window.
             pipWindow.document.body.append(pipPage);
             page = pipWindow;
+
+            pipWindow.addEventListener("unload", (event) => {
+                page = window;
+                addTimers();
+            });
         } catch (e) {
             console.log("pip don't work")
         }
