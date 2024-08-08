@@ -1,4 +1,4 @@
-let refresh = 1000000;
+let refresh = 10000;
 let ul_selector = 'ul[class="blocks blocks-100 blocks-xlg-3 blocks-md-2 blocks-sm-1 postits-container"]';
 let page = window;
 
@@ -146,7 +146,9 @@ class ClockBar {
     constructor(hourIn, hourOut) {
         this.#start.string.time = hourIn;
         this.#end.string.time = hourOut;
+        let notEnded = false;
         if (this.#end.string.time === null) {
+            notEnded = true;
             this.#end.string.time = new Date().getHours() + ':' + new Date().getMinutes();
             ClockBar.position = 'in';
 
@@ -201,9 +203,11 @@ class ClockBar {
         this.div.content.classList.add('clock-bar-content-content');
         this.div.html.appendChild(this.div.content);
 
-        this.div.fadeContent = page.document.createElement('div');
-        this.div.fadeContent.classList.add('clock-bar-content-content-fade');
-        this.div.content.appendChild(this.div.fadeContent);
+        if(notEnded) {
+            this.div.fadeContent = page.document.createElement('div');
+            this.div.fadeContent.classList.add('clock-bar-content-content-fade');
+            this.div.content.appendChild(this.div.fadeContent);
+        }
 
         // ajouter un label à la div créé avec les heures de début et de fin
         let label = page.document.createElement('label');
@@ -269,11 +273,22 @@ function activePip() {
     });
 }
 
-$(document).ready(function () {
-    $.when($(ul_selector)).then(function (obj) {
-        addTimers(ul_selector);
-        page.setInterval(function () {
-            addTimers(ul_selector);
-        }, refresh);
+function main() {
+    console.log('load main');
+    $(document).ready(function () {
+        $.when($(ul_selector)).then(function (obj) {
+            let interval;
+            try {
+                addTimers(ul_selector);
+                interval = page.setInterval(function () {
+                    addTimers(ul_selector);
+                }, refresh);
+            } catch (e) {
+                clearInterval(interval);
+                setTimeout(main, 1000);
+            }
+        });
     });
-});
+}
+
+main();

@@ -107,16 +107,16 @@
 
       #custom-counter .clock-bar-content-content-fade {
         position: relative;
-        width: 100%;
+        width: calc(100% + 50px);
         height: 10px;
         left: 0;
-        transform: translateX(100%);
+        transform: translateX(calc(100% - 50px));
         background: linear-gradient(to right, #bf077f, lightgrey 50%);
       }
 
       #custom-counter .clock-bar-content-content-end-of-day {
         width: 100%;
-        background: linear-gradient(to right, #bf077f, lightgrey 15%);
+        background: lightgrey;
         height: 10px;
       }
 
