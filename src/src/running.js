@@ -22,7 +22,7 @@ function addTimers(ul) {
             let innertext = '';
             let hourToDo = Math.floor(x / 60);
             let minuteToDo = x % 60;
-            minuteToDo = result.timechecks[0].time_out === null ? minuteToDo + 30 : minuteToDo;
+            minuteToDo = result.timechecks[0]?.time_out === null ? minuteToDo + 30 : minuteToDo;
             let endHour = date.getHours() + hourToDo;
             if (minuteToDo >= 60) {
                 minuteToDo = minuteToDo - 60;
